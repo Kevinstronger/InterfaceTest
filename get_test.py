@@ -1,4 +1,6 @@
-import httplib, json
+#coding=UTF-8
+import httplib, json, re
+
 header = ['title', 'statisticID', 'GUID', 'type', 'id', 'imgURL', 'adURL']
 channelList = ['video', 'videoids']
 video = ['videoLength', 'videoSizeHigh', 'videoURLLow', 
@@ -31,10 +33,21 @@ if res.status == httplib.OK:
     for i in range(0, len(result['channelList'])):
         
         list3 = result['channelList'][i]
+        #print list3
         l3 = list3. keys()
-        #print l3
+        
         l4 = list3['video'][0].keys()
-        print (sorted(l4) == sorted(video))
+        videoPublishTime = list3['video'][0]['videoPublishTime']
+        #验证时间格式是否正确
+        if not videoPublishTime == '':
+            if re.search('\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}$', videoPublishTime):
+                print "The datatime format is correct!"
+            else:
+                print "The format is incorrect!"
+        #print l4
+        
+        #print (sorted(l4) == sorted(video))
     
 else:
     print 'StatusCode = ', res.status,'reason = ', res.reason 
+
